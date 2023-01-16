@@ -22,13 +22,13 @@ app.use(compression())
 app.use(express.json())
 app.use(express.static("../client/build"))
 
-app.get('/', (req: express.Request, res: express.Response) => {
-    res.send('Hello World!')
-})
+app.get('/', (req, res) => {
+    res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
 
-app.get('/login', (req: express.Request, res: express.Response) => {
-    res.send('LOGIN PAGE')
-})
+// app.get('/login', (req: express.Request, res: express.Response) => {
+//     res.send('LOGIN PAGE')
+// })
 
 
 // Default 404
