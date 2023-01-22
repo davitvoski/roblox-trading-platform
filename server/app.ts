@@ -5,6 +5,7 @@ import { auth, ConfigParams } from 'express-openid-connect'
 import passport from "passport"
 import { addGooglePassportStrategy } from './auth/passport_google_oidc'
 import session from 'express-session'
+import { authenticationRouter } from './routes/authentication.routes'
 
 
 dotenv.config()
@@ -17,29 +18,24 @@ let secret: {
     resave: boolean,
     saveUninitialized: boolean
 } = { secret: process.env['SECRET'] as string, resave: false, saveUninitialized: true }
+
+addGooglePassportStrategy()
+
 app.use(session(
     secret
 ))
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(compression())
 app.use(express.json())
 app.use(express.static("../client/build"))
 
-addGooglePassportStrategy()
+// Authentication route
+app.use("/login", authenticationRouter)
 
-app.get('/login/google', passport.authenticate('google'))
 
-app.get('/oauth2/redirect',
-    passport.authenticate('google', { failureRedirect: '/login', failureMessage: true }),
-    function (req, res) {
-        res.redirect('/');
-    }
-)
-
-app.get('/login', (_: express.Request, res: express.Response) => {
-    res.send('login')
-
-})
 // Default 404
 app.use((_: express.Request, res: express.Response) => {
     res.sendStatus(404)

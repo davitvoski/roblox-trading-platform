@@ -1,14 +1,16 @@
 import dotenv from "dotenv"
 import GoogleStrategy from "passport-google-oidc"
 import passport from "passport"
+import { PrismaClient } from '@prisma/client'
 dotenv.config()
 
+const prisma = new PrismaClient()
 
 export function addGooglePassportStrategy() {
     passport.use(new GoogleStrategy({
         clientID: process.env['GOOGLE_CLIENT_ID'],
         clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
-        callbackURL: 'http://localhost:3000/oauth2/redirect'
+        callbackURL: 'http://localhost:3000/login',
     },
         function verify(issuer, profile, cb) {
             db.get('SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?', [
