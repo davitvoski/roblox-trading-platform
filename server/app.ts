@@ -1,39 +1,47 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import compression from 'compression'
-import { auth, ConfigParams } from 'express-openid-connect'
-import passport from "passport"
-import { addGooglePassportStrategy } from './auth/passport_google_oidc'
-import session from 'express-session'
+
 import { authenticationRouter } from './routes/authentication.routes'
+import { PrismaClient } from '@prisma/client'
+import session from 'express-session'
 
 
 dotenv.config()
 
+const prisma = new PrismaClient()
+prisma.$connect()
 
 const app = express()
-// Expreess middleware
-let secret: {
+
+const options: {
     secret: string,
     resave: boolean,
-    saveUninitialized: boolean
-} = { secret: process.env['SECRET'] as string, resave: false, saveUninitialized: true }
+    saveUninitialized: boolean,
+    cookie: { secure?: boolean }
+} = {
+    secret: process.env['SESSION_SECRET'] as string,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {}
+}
 
-addGooglePassportStrategy()
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1) // trust first proxy
+    options.cookie.secure = true // serve secure cookies
+}
 
-app.use(session(
-    secret
-))
-
-app.use(passport.initialize())
-app.use(passport.session())
+// Express middleware
+app.use(session(options))
 
 app.use(compression())
 app.use(express.json())
+
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static("../client/build"))
 
 // Authentication route
-app.use("/login", authenticationRouter)
+app.use("/api", authenticationRouter)
 
 
 // Default 404
