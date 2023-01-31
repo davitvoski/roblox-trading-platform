@@ -1,11 +1,11 @@
-import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import bcrypt from 'bcrypt'
 import session from "express-session";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { generateHash } from "../utils/generateHash";
 
-const prisma = new PrismaClient()
+import { prisma } from "../app";
+
 
 // type TypeUserSession = session.Session & Partial<session.SessionData> & {
 //     userid?: string

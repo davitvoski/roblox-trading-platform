@@ -5,10 +5,8 @@ import session from "express-session";
 import { generateHash } from "../utils/generateHash";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { loginController, logoutController, singUpController } from "../controllers/auth.controller";
-
 // TODO: Add google authentication
 const router = express.Router()
-const prisma = new PrismaClient()
 const saltRounds = 10
 
 type TypeUserSession = session.Session & Partial<session.SessionData> & {
@@ -18,6 +16,7 @@ type TypeUserSession = session.Session & Partial<session.SessionData> & {
 let USER_SESSION: TypeUserSession | null = null
 
 
+// TODO: Implement Sessions
 router.post("/logout", logoutController)
 
 /**
