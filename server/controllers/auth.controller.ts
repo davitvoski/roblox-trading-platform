@@ -42,7 +42,7 @@ export async function singUpController(req: Request, res: Response) {
             }
         })
 
-        res.status(201).send({ user: user })
+        res.sendStatus(200)
     } catch (err) {
         res.status(500)
         // Check if user already exists
