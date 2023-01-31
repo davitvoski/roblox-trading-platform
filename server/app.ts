@@ -1,38 +1,45 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import compression from 'compression'
-
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUi from "swagger-ui-express"
 import { authenticationRouter } from './routes/authentication.routes'
 import { PrismaClient } from '@prisma/client'
 import session from 'express-session'
-
-
 dotenv.config()
 
 const prisma = new PrismaClient()
 prisma.$connect()
 
+const swaggerDefinition: swaggerJSDoc.SwaggerDefinition = {
+    openapi: "3.0.0",
+    info: {
+        title: "API Documentation",
+        version: "1.0.0",
+        description: "This is the documentation for the Website Server",
+    },
+    servers: [
+        {
+            url: "http://localhost:3000",
+            description: "Development server"
+        },
+        {
+            url: "TBD",
+            description: "Production server"
+        }
+    ]
+}
+
+const options: swaggerJSDoc.Options = {
+    swaggerDefinition,
+    apis: ['./routes/*.ts']
+}
+
+const swaggerSpec = swaggerJSDoc(options)
+
 const app = express()
-    app.set('trust proxy', 1) // trust first proxy
 
-const options: {
-    secret: string,
-    resave: boolean,
-    saveUninitialized: boolean,
-    cookie: { secure?: boolean }
-} = {
-    secret: process.env['SECRET'] as string,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true}
-}
-
-if (app.get('env') === 'production') {
-    options.cookie.secure = true // serve secure cookies
-}
-
-// Express middleware
-app.use(session(options))
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 app.use(compression())
 app.use(express.json())
