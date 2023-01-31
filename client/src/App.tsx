@@ -1,13 +1,15 @@
 import { useState } from 'react'
-import './App.css'
-import Login from './pages/Login'
+import { Outlet } from 'react-router-dom'
+import Login from './pages/auth/Login'
 
 
 function App() {
 
   return (
     <div className='w-full h-screen'>
-        <Login />
+        {/* <Login /> */}
+
+        <Outlet />
     </div>
   )
 }

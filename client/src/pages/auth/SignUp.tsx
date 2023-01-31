@@ -27,7 +27,6 @@ export default function SignUp() {
 
     async function fetchData(e: FormEvent) {
         e.preventDefault()
-
         // TODO: find a way to reset the error state
         setErrorFields(false)
 
@@ -41,16 +40,11 @@ export default function SignUp() {
             password: password,
             email: email
         }, {
-            // validateStatus: (status) => {
-            //     return status === 200
-            // },
             headers: {
                 "content-type": 'application/json'
             }
         }).then((res: AxiosResponse) => {
-            // TODO: Set the user Context
-            navigate('/profile')
-
+            navigate('/login', { state: { user_created: "User Created." } })
         }).catch((err: any) => {
             if (!err.response.data.available) {
                 setErrorFailed(err.response.data!!.error)

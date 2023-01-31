@@ -13,6 +13,7 @@ const prisma = new PrismaClient()
 prisma.$connect()
 
 const app = express()
+    app.set('trust proxy', 1) // trust first proxy
 
 const options: {
     secret: string,
@@ -20,14 +21,13 @@ const options: {
     saveUninitialized: boolean,
     cookie: { secure?: boolean }
 } = {
-    secret: process.env['SESSION_SECRET'] as string,
+    secret: process.env['SECRET'] as string,
     resave: false,
     saveUninitialized: true,
-    cookie: {}
+    cookie: { secure: true}
 }
 
 if (app.get('env') === 'production') {
-    app.set('trust proxy', 1) // trust first proxy
     options.cookie.secure = true // serve secure cookies
 }
 
