@@ -3,8 +3,7 @@ import bcrypt from 'bcrypt'
 import session from "express-session";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { generateHash } from "../utils/generateHash";
-
-import { prisma } from "../app";
+import prisma from "../prisma/client";
 
 
 // type TypeUserSession = session.Session & Partial<session.SessionData> & {

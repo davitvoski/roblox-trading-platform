@@ -8,9 +8,6 @@ import { PrismaClient } from '@prisma/client'
 import session from 'express-session'
 dotenv.config()
 
-export const prisma = new PrismaClient()
-prisma.$connect()
-
 const swaggerDefinition: swaggerJSDoc.SwaggerDefinition = {
     openapi: "3.0.0",
     info: {
