@@ -2,6 +2,7 @@ import { Input, TextField } from "@mui/joy";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import GoogleLoginButton from "../../components/google/GoogleLogin";
 
 
 export default function SignUp() {
@@ -73,6 +74,7 @@ export default function SignUp() {
 
                     <button type='submit' onClick={fetchData} form='signup-form' className="bg-sky-500 p-2 rounded-xl w-1/2 self-center transition ease-in-out delay-100 hover:bg-action ">
                         SIGN UP</button>
+                    <GoogleLoginButton text="signup_with"/>
                 </form>
             </div>
         </>
