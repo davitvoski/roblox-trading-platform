@@ -4,7 +4,7 @@
     /* Projects */
     "target": "ES6" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
     "lib": ["es2022"],
-    "typeRoots": ["./node_modules/@types", "./types"],
+    "typeRoots": ["./node_modules/@types", "./types", "../shared"],
     /* Modules */
     "module": "CommonJS" /* Specify what module code is generated. */,
     "rootDir": "./" /* Specify the root folder within your source files. */,
