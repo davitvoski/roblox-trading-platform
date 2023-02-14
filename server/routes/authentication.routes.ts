@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import session from "express-session";
 import { generateHash } from "../utils/generateHash";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
-import { loginController, logoutController, singUpController } from "../controllers/auth.controller";
+import { googleLoginController, loginController, logoutController, singUpController } from "../controllers/auth.controller";
 // TODO: Add google authentication
 const router = express.Router()
 const saltRounds = 10
@@ -15,6 +15,7 @@ type TypeUserSession = session.Session & Partial<session.SessionData> & {
 
 let USER_SESSION: TypeUserSession | null = null
 
+router.post("/auth/google/login", googleLoginController)
 
 // TODO: Implement Sessions
 router.post("/logout", logoutController)
