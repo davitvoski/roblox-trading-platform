@@ -8,11 +8,13 @@ This website is a trading platform where users will be able to create an account
 ## Features - TO DO
 - [ ] Sign Up/Login
   -  [ ] Google Sign In
-  -  [ ] Normal Sign In
+  -  [x] Normal Sign In
 - [ ] Link Roblox Account
 - [ ] Offer/Request Trade ads
   - [ ] Link to go to trading with that user
 - [ ] Player Information/`INVENTORY` Look UP
+- [ ] User Chatting
+  - [ ] Click On user profile - click chat
 - [ ] ...
 
 ## `Davit Voskerchyan` <br>
