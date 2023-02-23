@@ -1,11 +1,10 @@
 import dotenv from 'dotenv'
-import express, { Request } from 'express'
+import express from 'express'
 import compression from 'compression'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUi from "swagger-ui-express"
-import { authenticationRouter } from './routes/authentication.routes'
-import { PrismaClient } from '@prisma/client'
 import session from 'express-session'
+import allroutes from './routes/allroutes.'
 dotenv.config()
 
 
@@ -61,7 +60,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static("../client/build"))
 
 // Authentication route
-app.use("/api", authenticationRouter)
+app.use("/api", allroutes)
 
 
 // Default 404

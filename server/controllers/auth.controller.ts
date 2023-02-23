@@ -197,7 +197,7 @@ export async function loginController(req: Request, res: Response) {
   // }
   try {
     const user = await getUniqueUserByUsername(prisma, req.body.username);
-    console.log("login user", user);
+
     if (!user) throw Error("User not found");
 
     const isSameUser = bcrypt.compareSync(req.body.password, user.password);

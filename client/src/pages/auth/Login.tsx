@@ -54,7 +54,7 @@ export default function Login() {
     }
     await axios
       .post(
-        "/api/login",
+        "/api/auth/login",
         {
           username: username,
           password: password,

@@ -63,7 +63,7 @@ export default function SignUp() {
 
     await axios
       .post(
-        "api/signup",
+        "api/auth/signup",
         {
           username: username,
           password: password,
