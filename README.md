@@ -7,7 +7,7 @@ This website is a trading platform where users will be able to create an account
 
 ## Features - TO DO
 - [x] Sign Up/Login
-  -  [x Google Sign In
+  -  [x] Google Sign In
   -  [x] Normal Sign In
 - [ ] Link Roblox Account
 - [ ] Offer/Request Trade ads
