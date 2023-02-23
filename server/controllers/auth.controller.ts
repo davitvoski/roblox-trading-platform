@@ -19,11 +19,15 @@ const client = new OAuth2Client(process.env["GOOGLE_CLIENT_ID"]);
  * @param {Response} res  express response object
  */
 export function logoutController(req: Request, res: Response) {
-  // console.log("logout")
-  res.writeHead(301, {
-    Location: "/",
-  }).end()
-  res.send()
+  req.session.destroy(function (err) {
+    if (err || err === undefined) {
+      return res.sendStatus(500)
+    }
+    res.clearCookie('id')
+    return res.sendStatus(200)
+  })
+
+
 }
 
 /**
@@ -63,28 +67,13 @@ export async function googleSignUpController(req: Request, res: Response) {
 
     const user = await prisma.user.create({
       data: {
-        userName: tokenPayload?.name+r as string,
+        userName: tokenPayload?.name + r as string,
         email: tokenPayload?.email as string,
         password: ""
       }
     })
 
-
-    // Create session
-    req.session.regenerate(err => {
-      if (err) {
-        res.status(500).json({ error: "Internal Server Error" });
-        return;
-      }
-
-      const pubuser: PubUser = {
-        userName: user.userName,
-        email: user.email
-      }
-
-      req.session.user = pubuser
-      res.json({ user: pubuser })
-    })
+    res.json("User created")
 
   } catch (error) {
     console.log(error);
@@ -204,13 +193,25 @@ export async function loginController(req: Request, res: Response) {
 
     if (!isSameUser) throw Error("Incorrect Password");
 
-    type UserWithoutPassword = Omit<typeof user, "password">;
     // USER_SESSION = req.session
 
     // USER_SESSION.userid = user.userName
 
-    res.status(200);
-    res.json({ user: user as UserWithoutPassword });
+    // Create session
+    req.session.regenerate(err => {
+      if (err) {
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
+
+      const pubuser: PubUser = {
+        userName: user.userName,
+        email: user.email
+      }
+      req.session.user = pubuser
+      res.json({ user: pubuser })
+    })
+
   } catch (error) {
     res.status(401);
     if (error instanceof Error) {
