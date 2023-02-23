@@ -13,14 +13,13 @@ export async function getUniqueUserByUsername(prisma: PrismaClient, userName: st
 
 }
 
-export async function getUniqueUserByEmail(prisma: PrismaClient, email: string): Promise<User> {
+export async function getUniqueUserByEmail(prisma: PrismaClient, email: string): Promise<User|null> {
     const myUser = await prisma.user.findUnique({
         where: {
             email: email
         }
     })
 
-    if (!myUser) throw Error("User not found")
 
     return myUser
 

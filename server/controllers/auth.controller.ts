@@ -20,9 +20,86 @@ const client = new OAuth2Client(process.env["GOOGLE_CLIENT_ID"]);
  */
 export function logoutController(req: Request, res: Response) {
   // console.log("logout")
-  res.redirect("/login");
+  res.writeHead(301, {
+    Location: "/",
+  }).end()
+  res.send()
 }
 
+/**
+ * This function is used to sign in the user using google.
+ * @param req express request object
+ * @param res express response object
+ */
+export async function googleSignUpController(req: Request, res: Response) {
+  try {
+    if (!req.body.token) {
+      res.status(498).json({ error: "Invalid Token" });
+    }
+    const token = req.body.token;
+
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env["GOOGLE_CLIENT_ID"] as string,
+    });
+
+    if (!ticket) {
+      res
+        .status(401)
+        .json({ error: "You are not authorized to use this token." });
+      return;
+    }
+
+    // Get User
+    let r = (Math.random() + 1).toString(36).substring(7);
+
+    const tokenPayload = ticket.getPayload();
+    const userExists = await getUniqueUserByEmail(prisma, tokenPayload?.email as string)
+
+    if (userExists) {
+      res.status(401).json({ error_message: "User already exists" })
+      return
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        userName: tokenPayload?.name+r as string,
+        email: tokenPayload?.email as string,
+        password: ""
+      }
+    })
+
+
+    // Create session
+    req.session.regenerate(err => {
+      if (err) {
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
+
+      const pubuser: PubUser = {
+        userName: user.userName,
+        email: user.email
+      }
+
+      req.session.user = pubuser
+      res.json({ user: pubuser })
+    })
+
+  } catch (error) {
+    console.log(error);
+    res.status(500)
+    res.json({
+      error_message: "Something went wrong"
+    })
+  }
+}
+
+/**
+ * This function is used to sign in the user using google.
+ * @param req express request object
+ * @param res express response object
+ */
 export async function googleLoginController(req: Request, res: Response) {
   try {
     if (!req.body.token) {
@@ -41,14 +118,12 @@ export async function googleLoginController(req: Request, res: Response) {
         .json({ error: "You are not authorized to use this token." });
       return;
     }
-    
-    // Get User
-    let r = (Math.random() + 1).toString(36).substring(7);
-    console.log("random String", r);
-    
+
     const tokenPayload = ticket.getPayload();
     const user = await getUniqueUserByEmail(prisma, tokenPayload?.email as string)
-    
+
+    if (!user) throw Error("User not found")
+
     // Create session
     req.session.regenerate(err => {
       if (err) {
@@ -60,10 +135,7 @@ export async function googleLoginController(req: Request, res: Response) {
         userName: user.userName,
         email: user.email
       }
-
       req.session.user = pubuser
-      console.log(pubuser)
-      console.log(req.session.user)
       res.json({ user: pubuser })
     })
 
