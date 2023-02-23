@@ -1,44 +1,28 @@
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
+import { PubUser } from "../../../../shared";
 
 declare type GoogleLoginProps = {
-  text?: "signin_with" | "signup_with" | "continue_with" | "signin"
+  text?: "signin_with" | "signup_with" | "continue_with" | "signin";
+  // setError: (error: string) => void;
+  onSuccess: (googleData: CredentialResponse) => void;
+  onError: () => void;
 };
 
-export default function GoogleLoginButton({ text }: GoogleLoginProps) {
+export default function GoogleLoginButton({
+  text,
+  onSuccess,
+  onError,
+}: GoogleLoginProps) {
   const navigate = useNavigate();
-
-  async function handleLogin(googleData: CredentialResponse) {
-    const res = await axios
-      .post(
-        "/api/auth/google",
-        {
-          token: googleData.credential,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((res: AxiosResponse) => {
-        console.log(res);
-        const resp = res.data();
-      })
-      .catch((err: AxiosError) => {});
-  }
-
-  async function handleError() {
-    navigate("/login", { state: { error: "Could not sign in with Google." } });
-  }
 
   return (
     <>
       <span className=" self-center">
         <GoogleLogin
-          onSuccess={handleLogin}
-          onError={handleError}
+          onSuccess={onSuccess}
+          onError={onError}
           theme="filled_blue"
           shape="circle"
           text={text}

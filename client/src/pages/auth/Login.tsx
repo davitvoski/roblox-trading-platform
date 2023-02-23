@@ -1,7 +1,9 @@
 import { Input, TextField } from "@mui/joy";
+import { CredentialResponse } from "@react-oauth/google";
 import axios, { AxiosResponse } from "axios";
 import { FormEvent, useEffect, useState } from "react";
 import { Link, redirect, useLocation, useNavigate } from "react-router-dom";
+import { PubUser } from "../../../../shared";
 import GoogleLoginButton from "../../components/google/GoogleLogin";
 
 export default function Login() {
@@ -11,14 +13,46 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  async function handleGoogleLogin(googleData: CredentialResponse) {
+    await axios
+      .post(
+        "/api/auth/google/login",
+        {
+          token: googleData.credential,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res: AxiosResponse) => {
+        const user: PubUser = res.data.user;
+        navigate("/profile")
+      })
+      .catch((err: any) => {
+        if (err.response.data.error_message) {
+          setError(err.response.data!!.error_message);
+        } else {
+          setError("Could not login. Please try again later.");
+        }
+      });
+  }
+
+  async function handleGoogleError() {
+    navigate("/login", {
+      state: { error: "Could not sign in with Google." },
+    });
+  }
+
   async function handleLogin(e: FormEvent) {
     e.preventDefault();
+
     if (username === "" || password === "") {
       setError("Please fill in all fields");
       return;
     }
-
-    const resp = await axios
+    await axios
       .post(
         "/api/login",
         {
@@ -83,7 +117,11 @@ export default function Login() {
           >
             SIGN IN
           </button>
-          <GoogleLoginButton text="signin_with"/>
+          <GoogleLoginButton
+            text="signin_with"
+            onError={handleGoogleError}
+            onSuccess={handleGoogleLogin}
+          />
         </form>
       </div>
     </>
