@@ -1,14 +1,22 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { googleLoginController, googleSignUpController, loginController, logoutController, singUpController } from "../controllers/auth.controller";
+
+export function isAuthenticated(req: Request, res: Response, next: express.NextFunction) {
+  if (req.session.user) {
+    next();
+  } else {
+    res.status(401).json({ error_message: "You are not logged in" });
+  }
+}
 
 const router = express.Router()
 
+router.post("/logout", isAuthenticated, logoutController)
+
 router.post("/google/signup", googleSignUpController)
 
+// Generate swagger documentation for this route
 router.post("/google/login", googleLoginController)
-
-// TODO: Implement Sessions
-router.post("/logout", logoutController)
 
 /**
  * @openapi
