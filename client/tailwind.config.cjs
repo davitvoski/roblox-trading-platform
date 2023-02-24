@@ -8,7 +8,7 @@ module.exports = {
     extend: {
       colors: {
         'action': "#D90368",
-        'idk': "#541388",
+        'purple': "#541388",
         'background': "#2E294E",
         'error': "#fa0532",
         'success': "#2FF923",
