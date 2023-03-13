@@ -5,9 +5,13 @@ import Login from "./pages/auth/Login";
 
 function App() {
   return (
-    <div className="h-screen w-full">
-      <Navbar />
-      <Outlet />
+    <div className="h-screen w-screen">
+      <div className="h-[10%]">
+        <Navbar />
+      </div>
+      <div className="h-[90%]">
+        <Outlet />
+      </div>
     </div>
   );
 }

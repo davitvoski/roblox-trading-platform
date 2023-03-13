@@ -28,7 +28,7 @@ export default function Login() {
       )
       .then((res: AxiosResponse) => {
         const user: PubUser = res.data.user;
-        navigate("/profile")
+        navigate("/profile");
       })
       .catch((err: any) => {
         if (err.response.data.error_message) {
@@ -81,7 +81,7 @@ export default function Login() {
 
   return (
     <>
-      <div className="flex h-full w-full -translate-y-10 flex-col items-center justify-center gap-4 text-center">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
         <h1 className="text-2xl">LOGIN</h1>
         {error && <h1 className=" text-error"> {error}</h1>}
         {state?.error && <h1 className=" text-error"> {state?.error}</h1>}
@@ -91,7 +91,7 @@ export default function Login() {
         <form
           id="login-form"
           onSubmit={handleLogin}
-          className="flex flex-col gap-4"
+          className="mb-20 flex flex-col gap-4"
         >
           <Input
             className="w-5/5"

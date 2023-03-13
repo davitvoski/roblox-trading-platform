@@ -1,12 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import App from './App'
-import './index.css'
-import SignUp from './pages/auth/SignUp'
-import Login from './pages/auth/Login'
-import { GoogleOAuthProvider } from '@react-oauth/google'
-
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import App from "./App";
+import "./index.css";
+import SignUp from "./pages/auth/SignUp";
+import Login from "./pages/auth/Login";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -15,25 +15,32 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Login />
+        element: <Login />,
       },
       {
         path: "/login",
-        element: <Login />
+        element: <Login />,
       },
       {
         path: "/signup",
-        element: <SignUp />
-      }
-    ]
-  }
-])
+        element: <SignUp />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
+      },
+      {
+        path: "/logout",
+        element: <Login />,
+      },
+    ],
+  },
+]);
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <RouterProvider router={router} />
-
     </GoogleOAuthProvider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
