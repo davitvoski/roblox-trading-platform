@@ -14,4 +14,6 @@ export default function Profile() {
       <section className="m-5 w-2/3 border border-green-400"></section>
     </section>
   );
+  // https://users.roblox.com/v1/users/48176515
+  //https://users.roblox.com/docs/index.html --- /v1/usernames/users
 }
