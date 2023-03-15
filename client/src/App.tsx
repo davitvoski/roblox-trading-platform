@@ -6,12 +6,12 @@ import Login from "./pages/auth/Login";
 function App() {
   return (
     <div className="h-screen w-screen">
-      <div className="h-[10%]">
+      <div className="h-[10%] min-h-[4em]">
         <Navbar />
       </div>
-      <div className="h-[90%]">
+      <main className="h-[90%]">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 }
