@@ -18,5 +18,13 @@ export type RobloxResponseGetUserByUsername = {
     ]
 }
 
+export type RobloxUser = {
+    description: string
+    isBanned: boolean
+    id: number
+    name: string
+    displayName: string
+}
+
 
 

@@ -4,4 +4,5 @@ export declare interface PubUser {
     avatar?: Blob
     robloxId: number = null
     robloxUsername: string = null
+    robloxUser: RobloxUser = null
 }
