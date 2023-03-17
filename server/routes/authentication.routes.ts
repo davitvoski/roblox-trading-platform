@@ -5,7 +5,7 @@ export function isAuthenticated(req: Request, res: Response, next: express.NextF
   if (req.session.user) {
     next();
   } else {
-    res.status(401).json({ error_message: "You are not logged in" });
+    return res.status(401).json({ error_message: "You are not logged in" });
   }
 }
 
